@@ -1,5 +1,7 @@
 # model a.mod;
 # data a.dat;
+# option loqo_options "iterlim=1500";
+# option knitro_options "alg=5";
 option presolve_eps 1e-15;
 # option solver minos	;
 # option solver ipopt;

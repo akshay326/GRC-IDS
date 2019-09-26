@@ -2,7 +2,7 @@ data;
 
 set actions = low, high;
 
-param W := 10;
+param W := 15;
 
 param discount = 0.8;
 

@@ -72,8 +72,8 @@ param D {w in 0..W,
 	else 0)))  ;
 
 # ml^n * 1 for given i,w
-var T {i in 1..2, w in 0..W,  # worst case transition probab
-	w_next in 0..W, a in actions, b in actions} >= tmin[w,w_next,a,b], <= tmax[w,w_next,a,b];
+var T {i in 1..2, w in 0..W,  # worst case transition probab										avg is safe assumption as tmin,tmax are symetric
+	w_next in 0..W, a in actions, b in actions} >= tmin[w,w_next,a,b], <= tmax[w,w_next,a,b], := (tmin[w,w_next,a,b]+tmax[w,w_next,a,b])/2;
 
 # j * 1 for given i,w
 var q {i in 1..2, w in 0..W, 
@@ -114,9 +114,14 @@ subject to corollary2_7 {i in 1..2, w in 0..W}:
 	_gamma[i,w] >= (sum{j in 1..2} _b[w,j]*q[i,w,j]) + (sum{a in actions, b in actions} _r[i,w,a,b]) +
 				   (sum{a in actions, b in actions} C[i,w,a,b]*(if i =1 then sigma[i,w,a] else sigma[i,w,b]));
 
+# subject to corollary2_6 {i in 1..2, w in 0..W,
+# 	w_next in 0..W, a in actions, b in actions}:
+# 	(sum{j in 1..2} A[w,j,w_next,a,b]*q[i,w,j]) + (sum{x in actions, y in actions} D[w,a,b,w_next,x,y]*_r[i,w,x,y]) -
+# 	discount*_z[i,w,w_next,a,b] >= 0;   # reduced this using eqn_15
+
 subject to corollary2_6 {i in 1..2, w in 0..W,
 	w_next in 0..W, a in actions, b in actions}:
-	(sum{j in 1..2} A[w,j,w_next,a,b]*q[i,w,j]) + (sum{x in actions, y in actions} D[w,a,b,w_next,x,y]*_r[i,w,x,y]) -
+	(sum{j in 1..2} A[w,j,w_next,a,b]*q[i,w,j]) + _r[i,w,a,b] -
 	discount*_z[i,w,w_next,a,b] >= 0;   # reduced this using eqn_15
 
 subject to eqn_15 {i in 1..2, w in 0..W,
@@ -134,6 +139,10 @@ subject to corollary2_2 {i in 1..2, w in 0..W,
 	j in 1..2}: 
 	(sum{w_next in 0..W, a in actions, b in actions} A[w,j,w_next,a,b]*T[i,w,w_next,a,b]) >= _b[w,j];
 
+# subject to corollary2_1 {i in 1..2, w in 0..W,
+# 	a1 in actions, b1 in actions}:
+# 	 (sum{w_next in 0..W, a2 in actions, b2 in actions} D[w,a1,b1,w_next,a2,b2]*T[i,w,w_next,a2,b2])=1;
+
 subject to corollary2_1 {i in 1..2, w in 0..W,
-	a1 in actions, b1 in actions}:
-	 (sum{w_next in 0..W, a2 in actions, b2 in actions} D[w,a1,b1,w_next,a2,b2]*T[i,w,w_next,a2,b2])=1;
+ 	a1 in actions, b1 in actions}:
+	 (sum{w_next in 0..W} T[i,w,w_next,a1,b1])=1;

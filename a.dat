@@ -1,0 +1,25 @@
+data;
+
+set actions = low, high;
+
+param W := 10;
+
+param discount = 0.8;
+
+param Ch1 := 8;
+param Ch2 :=10;
+param Cl1 := 0;
+param Cl2 := 2;
+
+param:  s1		s2:=
+low     0		10
+high    8		50;
+	
+param:	Pmin 	Pmax:=
+1		0.79	0.81
+2		0.77	0.83
+3		0.74	0.86
+4		0.7		0.9
+5		0.65	0.95;
+
+

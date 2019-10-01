@@ -1,0 +1,7 @@
+model a.mod;
+data a.dat;
+option solver "/home/akshay/Downloads/ipopt";
+solve;
+display sigma;
+display value;
+quit;
